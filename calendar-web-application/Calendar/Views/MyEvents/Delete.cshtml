@@ -1,0 +1,37 @@
+﻿@model CalendarWeb.Models.UserEvents
+
+
+<h3 class="p-5">Are you sure you want to cancel this booking?</h3>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.Summary)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Time: 
+        </dt>
+        @{string start = Model.StartTime.ToString("HH:mm");
+          string end = Model.EndTime.ToString("HH:mm"); }
+        <dd>
+            @start - @end
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Room.Building.Name): 
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room.Building.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Room.RoomNumber):
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Room.RoomNumber)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a  class="text-info" asp-action="Index">Back to List</a>
+    </form>
+</div>

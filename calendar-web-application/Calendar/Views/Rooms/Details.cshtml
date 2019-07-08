@@ -1,0 +1,103 @@
+﻿@model CalendarWeb.Models.RoomDetailsViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="pt-4"></div>
+<h4>Room @Html.DisplayFor(m => m.Room.RoomNumber)</h4>
+
+
+<div>
+    @if (Model.Nearest == null)
+    {
+        <h4 class="text-success">Free</h4>
+    }
+    else
+    {
+        <h4 class="text-danger">Booked</h4>
+        <h4>Closest Empty Room: @Html.DisplayFor(Model => Model.Nearest.RoomNumber)</h4>
+    }
+</div>
+
+
+
+@if (User.Identity.IsAuthenticated)
+{
+<div>
+    <form asp-action="Details">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="RoomId" value="@Model.Room.Id" />
+        <div class="form-group">
+            <label asp-for="Summary" class="control-label"></label>
+            <input asp-for="Summary" class="form-control" />
+            <span asp-validation-for="Summary" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="start" class="control-label"></label>
+            <input asp-for="start" id="type" type="time" class="form-control" />
+            <span asp-validation-for="start" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="end" class="control-label"></label>
+            <input asp-for="end" type="time" class="form-control" />
+            <span asp-validation-for="end" class="text-danger"></span>
+        </div>
+
+        <div class="form-group" >
+            <label asp-for="date" class="control-label"></label>
+            <input asp-for="date" id="datepick" type="date" class="form-control" />
+            <span asp-validation-for="date" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Book" class="btn btn-default" />
+
+        </div>
+
+    </form>
+
+
+</div>
+}
+
+<div>
+    @for (int i = 0; i < 7; i++)
+    {
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@i" aria-expanded="true" aria-controls="collapse_@i">
+                            @DateTime.Now.AddDays(i).ToString("dddd, MMMM dd")
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapse_@i" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                    @foreach (var item in Model.Events.Items)
+                    {
+                        @if (item.Start.DateTime > @DateTime.Today.AddDays(i) && item.End.DateTime < @DateTime.Today.AddDays(i + 1))
+                        {
+                            <div class="card p-3">
+
+                                <div class="card-body">
+                                    <h5 class="card-title">@Html.DisplayFor(m => item.Summary)</h5>
+                                    <h5>Owner: @Html.DisplayFor(modelItem => item.ExtendedProperties.Shared["owner"])</h5>
+                                    @{DateTime start = item.Start.DateTime.Value;}
+                                    @{DateTime end = item.End.DateTime.Value;}
+                                    <p class="card-text">@start.ToString("HH:mm") - @end.ToString("HH:mm")</p>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,64 @@
+﻿@model CalendarWeb.Models.MyEventsModelView
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>My Events</h2>
+<div>
+
+</div>
+        <div>
+            <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                <li class="nav-item active">
+                    <a class="nav-link" data-toggle="tab" href="#current" role="tab" aria-controls="current">Current Events</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#previous" role="tab" aria-controls="previous">Previous Events</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="tab-content">
+                <div class="tab-pane active" id="current" role="tabpanel">
+                    @foreach(var item in Model.CurrentEvents)
+                    {
+                        <div class="card m-4">
+                            <h5 class="card-header">@Html.DisplayFor(m => item.Room.RoomNumber)</h5>
+                                
+                            
+                            <div class="card-body">
+                                <h5 class="card-title">@Html.DisplayFor(m => item.Summary)</h5>
+                                <p class="card-text">@Html.DisplayFor(m => item.StartTime) - @Html.DisplayFor(m => item.EndTime)</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="text-danger"asp-action="Delete" asp-route-id="@item.Id">Cancel</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="tab-pane p-3" id="previous" role="tabpanel">
+                    <form asp-action="Clear">
+                        <input type="submit" value="Clear Old Events" class="btn btn-default m-2" />
+                    </form>
+                    @foreach (var item in Model.PreviousEvents)
+                    {
+                        <div class="card m-4">
+                            <h5 class="card-header">@Html.DisplayFor(m => item.Room.RoomNumber)</h5>
+                            <div class="card-body">
+                                <h5 class="card-title">@Html.DisplayFor(m => item.Summary)</h5>
+                                <p class="card-text">@Html.DisplayFor(m => item.StartTime) - @Html.DisplayFor(m => item.EndTime)</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+</div>
+<div>
+
+</div>
+
+
+
+
+
